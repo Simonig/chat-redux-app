@@ -1,9 +1,5 @@
-/* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-
-import { ChatMessageComponent } from './chat-message.component';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ChatMessageComponent} from './chat-message.component';
 
 describe('ChatMessageComponent', () => {
   let component: ChatMessageComponent;
@@ -11,9 +7,9 @@ describe('ChatMessageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChatMessageComponent ]
+      declarations: [ChatMessageComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

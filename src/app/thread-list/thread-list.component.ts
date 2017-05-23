@@ -2,33 +2,36 @@ import {Component, OnInit, Input, EventEmitter, Output, ChangeDetectionStrategy}
 import {ThreadSummaryVM} from "../thread-section/thread-summary.vm";
 
 @Component({
-    selector: 'thread-list',
-    templateUrl: './thread-list.component.html',
-    styleUrls: ['./thread-list.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+
+  selector: 'thread-list',
+  templateUrl: './thread-list.component.html',
+  styleUrls: ['./thread-list.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
+
 })
 export class ThreadListComponent implements OnInit {
 
-    @Input()
-    threads: ThreadSummaryVM[];
+  @Input()
+  threads: ThreadSummaryVM[];
 
-    @Input()
-    currentSelectedThreadId:number;
-
-
-    @Output()
-    threadSelected = new EventEmitter();
+  @Input()
+  currentSelectedThreadId: number;
 
 
-    constructor() {
-    }
+  @Output()
+  threadSelected = new EventEmitter();
 
-    ngOnInit() {
 
-    }
+  constructor() {
+  }
 
-    selectThread(threadId:number) {
-        this.threadSelected.next(threadId);
-    }
+  ngOnInit() {
+
+  }
+
+  selectThread(threadId: number) {
+    console.log(threadId);
+    this.threadSelected.next(threadId);
+  }
 
 }

@@ -13,34 +13,39 @@ import {UiState} from "../store/ui-state";
 import * as _ from 'lodash';
 
 @Component({
-    selector: 'thread-section',
-    templateUrl: './thread-section.component.html',
-    styleUrls: ['./thread-section.component.css']
+  selector: 'thread-section',
+  templateUrl: './thread-section.component.html',
+  styleUrls: ['./thread-section.component.css']
 })
 export class ThreadSectionComponent {
 
-    userName$: Observable<string>;
-    unreadMessagesCounter$: Observable<number>;
-    threadSummaries$: Observable<ThreadSummaryVM[]>;
+  userName$: Observable<string>;
+  unreadMessagesCounter$: Observable<number>;
+  threadSummaries$: Observable<ThreadSummaryVM[]>;
+  //currentSelectedThreadId$:Observable<number>;
 
-    uiState: UiState;
+  uiState: UiState;
 
-    constructor(private store: Store<ApplicationState>) {
+  constructor(private store: Store<ApplicationState>) {
 
-        this.userName$ = store.select(userNameSelector);
+    this.userName$ = store.select(userNameSelector);
 
-        this.unreadMessagesCounter$ = store.map(mapStateToUnreadMessagesCounter);
+    this.unreadMessagesCounter$ = store.map(mapStateToUnreadMessagesCounter);
 
-        this.threadSummaries$ = store.select(stateToThreadSummariesSelector);
+    this.threadSummaries$ = store.select(stateToThreadSummariesSelector);
 
-        store.select(state => state.uiState).subscribe(uiState => this.uiState =  _.cloneDeep(uiState) );
+    store.select(state => state.uiState).subscribe(uiState => this.uiState = _.cloneDeep(uiState));
 
-    }
+  }
 
-    onThreadSelected(selectedThreadId:number) {
-        this.store.dispatch(
-            new ThreadSelectedAction({selectedThreadId, currentUserId: this.uiState.userId}));
-    }
+
+  onThreadSelected(selectedThreadId: number) {
+
+    this.store.dispatch(new ThreadSelectedAction({
+      selectedThreadId,
+      currentUserId: this.uiState.userId
+    }));
+  }
 
 }
 
