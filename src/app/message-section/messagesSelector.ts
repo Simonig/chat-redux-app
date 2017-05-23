@@ -1,38 +1,55 @@
-
-
-
 import {ApplicationState} from "../store/application-state";
 import {MessageVM} from "./message.vm";
 import {Message} from "../../../shared/model/message";
 import * as _ from 'lodash';
+import {Participant} from "../../../shared/model/participant";
+import createSelector = Reselect.createSelector;
+import * as Reselect from "reselect";
 
 
 
-export function messagesSelector(state:ApplicationState): MessageVM[] {
 
-    const currentThreadId = state.uiState.currentThreadId;
 
-    if (!currentThreadId) {
-        return [];
-    }
+export const messagesSelector = createSelector(getParticipants, getMessagesForCurrentThread, mapMessagesToMessageVM);
 
-    const messageIds = state.storeData.threads[state.uiState.currentThreadId].messageIds;
 
-    const messages = messageIds.map(messageId =>  state.storeData.messages[messageId]);
 
-    return messages.map(_.partial(mapMessageToMessageVM, state));
+function getMessagesForCurrentThread(state: ApplicationState): Message[] {
+
+  const currentThread = state.storeData.threads[state.uiState.currentThreadId];
+
+  return currentThread ? currentThread.messageIds.map(messageId => state.storeData.messages[messageId]) : [];
+
+}
+
+function getParticipants (state:ApplicationState){
+
+  return state.storeData.participants;
+
+}
+
+function mapMessagesToMessageVM(participants: {[key:number]: Participant}, messages:Message[] ){
+
+  return messages.map(message => {
+
+      const participantName = participants[message.participantId].name;
+
+      return mapMessageToMessageVM(participantName, message)
+  });
+
+
+
 }
 
 
-
-function mapMessageToMessageVM(state: ApplicationState, message:Message): MessageVM {
-    return {
-        id: message.id,
-        text:message.text,
-        timestamp: message.timestamp,
-        participantName: state.storeData.participants[message.participantId].name
-    };
-}
+const mapMessageToMessageVM =  _.memoize((participantName: string, message: Message): MessageVM => {
+  return {
+    id: message.id,
+    text: message.text,
+    timestamp: message.timestamp,
+    participantName: participantName
+  };
+}, (participantName: string, message:Message) => message.id + participantName);
 
 
 
